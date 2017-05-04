@@ -111,9 +111,9 @@ getindelsQuick<-function(readLength,alignFmm,alignRmm,softclippedseqF,softclippe
         insertionInds<-unlist(apply(cbind(start(insertionsF),(end(insertionsF))),1,function(x){x[1]:x[2]}))
         ### just for deletion positions
 
-        deletionInds<-unlist(apply(cbind(start(GenomicRanges::unlist(deletion(alignFmm))),end(GenomicRanges::unlist(deletion(alignFmm)))),1,function(x){x[1]:x[2]}))
+        deletionInds<-unlist(apply(cbind(start(unlist(deletion(alignFmm))),end(unlist(deletion(alignFmm)))),1,function(x){x[1]:x[2]}))
 
-        delf<-GenomicRanges::unlist(deletion(alignFmm))
+        delf<-unlist(deletion(alignFmm))
 ##        delf<-delf[refInd[start(delf)] == refInd[end(delf)]]
 
         forwardIndeltable<-table(c(insertionInds,start(delf)))
@@ -125,8 +125,8 @@ getindelsQuick<-function(readLength,alignFmm,alignRmm,softclippedseqF,softclippe
 
         insertionIndsR<-unlist(apply(cbind(start(insertionsR),(end(insertionsR))),1,function(x){x[1]:x[2]}))
 ## just for deletions positions
-        deletionIndsR<-unlist(apply(cbind(start(GenomicRanges::unlist(deletion(alignRmm))),(end(GenomicRanges::unlist(deletion(alignRmm))))),1,function(x){x[1]:x[2]}))
-        reverseIndeltable<-table(readLength-c(insertionIndsR,start(GenomicRanges::unlist(deletion(alignRmm))))+1)
+        deletionIndsR<-unlist(apply(cbind(start(unlist(deletion(alignRmm))),(end(unlist(deletion(alignRmm))))),1,function(x){x[1]:x[2]}))
+        reverseIndeltable<-table(readLength-c(insertionIndsR,start(unlist(deletion(alignRmm))))+1)
 ## just for deletions positions
         reverseIndeltableWdel<-table(readLength-c(insertionIndsR,deletionIndsR)+1)
         reverseIndeltableWdel<-reverseIndeltableWdel[as.numeric(names(reverseIndeltableWdel)) %in% 1:readLength]
@@ -568,9 +568,9 @@ getindelsFull<-function(readLength,alignFmm,alignRmm,refInd){
         width(insertionsR)[width(insertionsR)>25]=25
         insertionInds<-unlist(apply(cbind(start(insertionsF),(end(insertionsF))),1,function(x){x[1]:x[2]}))
 
-        deletionInds<-unlist(apply(cbind(start(GenomicRanges::unlist(deletion(alignFmm))),end(GenomicRanges::unlist(deletion(alignFmm)))),1,function(x){x[1]:x[2]}))
+        deletionInds<-unlist(apply(cbind(start(unlist(deletion(alignFmm))),end(unlist(deletion(alignFmm)))),1,function(x){x[1]:x[2]}))
 
-        delf<-GenomicRanges::unlist(deletion(alignFmm))
+        delf<-unlist(deletion(alignFmm))
         delf<-delf[refInd[start(delf)] == refInd[end(delf)]]
 
         forwardIndeltable<-table(c(insertionInds,start(delf)))
@@ -582,8 +582,8 @@ getindelsFull<-function(readLength,alignFmm,alignRmm,refInd){
 
         insertionIndsR<-unlist(apply(cbind(start(insertionsR),(end(insertionsR))),1,function(x){x[1]:x[2]}))
 ## just for deletions positions
-        deletionIndsR<-unlist(apply(cbind(start(GenomicRanges::unlist(deletion(alignRmm))),(end(GenomicRanges::unlist(deletion(alignRmm))))),1,function(x){x[1]:x[2]}))
-        reverseIndeltable<-table(readLength-c(insertionIndsR,start(GenomicRanges::unlist(deletion(alignRmm))))+1)
+        deletionIndsR<-unlist(apply(cbind(start(unlist(deletion(alignRmm))),(end(unlist(deletion(alignRmm))))),1,function(x){x[1]:x[2]}))
+        reverseIndeltable<-table(readLength-c(insertionIndsR,start(unlist(deletion(alignRmm))))+1)
 ## just for deletions positions
         reverseIndeltableWdel<-table(readLength-c(insertionIndsR,deletionIndsR)+1)
         reverseIndeltableWdel<-reverseIndeltableWdel[as.numeric(names(reverseIndeltableWdel)) %in% 1:readLength]
@@ -746,7 +746,7 @@ dfmake2 <-
         refSide <- refM[indr]
 
         refChr<-gsub('chr','',as.character(seqnames(refRa)))[indr]
-        refsee <- Biostrings::unlist(DNAStringSet(prerefsee))
+        refsee <- unlist(DNAStringSet(prerefsee))
 
         formatrefsee <- data.frame(t(Biostrings::as.matrix(DNAStringSet(refsee))),refIndsee,refSide,refChr, -1,'refseq')
         colnames(formatrefsee) <- colnames(dftailA)
@@ -952,7 +952,7 @@ getpvalFull<-function(bamnamesF,bamnamesR,alignF,alignR,readLength,refInd,mmRate
 	 }else{
 	 missum<-mismatchSummary(alignF)$subject
 	 }
-	
+
 ##        concor<-sapply(with(missum,split(missum,SubjectPosition)),function(x){(sum(x$Count)/(sum(x$Count/x$Probability)))>=.5 & sum(x$Count) > 2})
         concor<-sapply(with(missum,split(missum,SubjectPosition)),function(x){sum(x$Count*x$Probability) >=2})
         if(any(concor)){
@@ -1135,11 +1135,11 @@ doAlignAndformatFull <-
 
          ## 10/24 New
             qualitySeqsR<-rep(PhredQuality(rev(mmRate)),length(bamseqs))
-         ### 8/22 New ###   
+         ### 8/22 New ###
             qualitySeqsR<-PhredQuality(substring(qualitySeqsR,first=rep(1,length(bamseqs)),last=width(bamseqs)))
             qualitySeqs<-rep(PhredQuality(mmRate),length(bamseqs))
             ### 8/22 New ###
-            qualitySeqs<-PhredQuality(substring(qualitySeqs,first=rep(1,length(bamseqs)),last=width(bamseqs)))            
+            qualitySeqs<-PhredQuality(substring(qualitySeqs,first=rep(1,length(bamseqs)),last=width(bamseqs)))
         subjectqual <- PhredQuality(rep(99L,nchar(refalign)))
         gapOpeningUse <- log2(mean(indelRate))
        gapExtensionArg <- -2
@@ -1168,7 +1168,7 @@ doAlignAndformatFull <-
 
         ### added 8/22
         ##if(length(unique(width(bamseqs)))>1) filterbyMM <- FALSE
-        
+
         if(filterbyMM){
             doloop=TRUE
             MMuse<-MM
@@ -1192,7 +1192,7 @@ doAlignAndformatFull <-
             Fkeep <- which(rowSums(letterFrequency(trimF,c('A','C','T','G')))<MMuse)## & rowSums(letterFrequency(trimF,c('M')))>(.6*readLength))# | score(alignF)>0)
             Rkeep <- which(rowSums(letterFrequency(trimR,c('A','C','T','G')))<MMuse)## & rowSums(letterFrequency(trimR,c('M')))>(.6*readLength))# | score(alignR)>0)
             bamnamesInit <- (c(bamnamesF[Fkeep],bamnamesR[Rkeep]))
-            
+
             if(length(rngsAlign)>1 &  bamnamesRemove[1]==''){
                 doloop<-all(aggregate(refM[c(start(alignF[Fkeep]@subject),start(alignR[Rkeep]@subject))],by=list(bamnamesInit),
                                     function(x){length(unique(x))})[,2]<2)

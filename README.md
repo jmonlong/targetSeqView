@@ -1,9 +1,19 @@
+
+# Why this fork
+
+The original repo hasn't been updated since 2014 and I got errors when testing it. It seems like it's due to updates in Bioconductor packages. In this fork I'm trying to fix these issues. I don't think I'll "clean up" the entire package but rather fix errors as they pop up (and cross fingers that the rest works as it should).
+
+For now I "fixed" the following errors:
+
+- `task 1 failed - "'unlist' is not an exported object from 'namespace:Biostrings'"`
+- `task 1 failed - "'unlist' is not an exported object from 'namespace:GenomicRanges'"`
+
 # Installation
 install directly from github
 
 ```r
 library(devtools)
-install_github("targetSeqView", "Eitan177")
+install_github("jmonlong/targetSeqView")
 ```
 
 
@@ -83,11 +93,11 @@ print(candidateDels@quickScore)
 ```
 
 ```
-##        1        2        3        4        5        6        7        8 
-## 1280.592  896.235  881.604  793.243  556.465  844.628  741.042  461.249 
-##        9       10       11       12       13       14       15       16 
-## 1065.448  749.678 -252.563  -77.755  -41.597  -35.835  -33.225  -32.736 
-##       17       18       19       20 
+##        1        2        3        4        5        6        7        8
+## 1280.592  896.235  881.604  793.243  556.465  844.628  741.042  461.249
+##        9       10       11       12       13       14       15       16
+## 1065.448  749.678 -252.563  -77.755  -41.597  -35.835  -33.225  -32.736
+##       17       18       19       20
 ##  -28.493  -25.971  -25.165   -7.992
 ```
 
@@ -102,7 +112,7 @@ failedvalidation <- candidateDels@quickScore[-indexOfvalidated]
 ### Figure 1: boxplot of likelihood scores from 20 candidates; 10 validated, 10 failed validation
 
 ```r
-boxplot(list(validated = validated, failed = failedvalidation, all = candidateDels@quickScore), 
+boxplot(list(validated = validated, failed = failedvalidation, all = candidateDels@quickScore),
     ylab = "log likelihood score")
 ```
 ![Distribution of 20 candidate deletions taken from a whole-genome sequencing dataset, broken down by validation status](https://raw.github.com/Eitan177/targetSeqView/master/vignettes/boxplots1.png)
@@ -156,7 +166,7 @@ print(candidateSVs@fullScore)
 
 
 Let's view the negative. Read-pair alignments supporting the SV look good, but read-pair
-alignments supporting contiguous fragments also look good, especially for side 1. This is how we identify the event as a negative and explains why the event recieved a low likelihood score 
+alignments supporting contiguous fragments also look good, especially for side 1. This is how we identify the event as a negative and explains why the event recieved a low likelihood score
 
 ### Figure 2: A chromosomal translocation that failed to validate
 
@@ -177,7 +187,7 @@ alignment pictures, one read from each pair has many mismatches/indels
 plotSV(candidateSVs, indices = 2)
 ```
 
-![A positive (i.e real) inversion. The top plot shows read-pair alignments supporting the SV and the bottom plots show read-pair alignments supporting contiguous sequences](https://raw.github.com/Eitan177/targetSeqView/master/vignettes/positive1.png) 
+![A positive (i.e real) inversion. The top plot shows read-pair alignments supporting the SV and the bottom plots show read-pair alignments supporting contiguous sequences](https://raw.github.com/Eitan177/targetSeqView/master/vignettes/positive1.png)
 
 
 
@@ -205,27 +215,27 @@ print(sessionInfo(), locale = FALSE)
 ```
 ## R version 3.0.1 (2013-05-16)
 ## Platform: x86_64-apple-darwin10.8.0 (64-bit)
-## 
+##
 ## attached base packages:
-## [1] grid      parallel  stats     graphics  grDevices utils     datasets 
-## [8] methods   base     
-## 
+## [1] grid      parallel  stats     graphics  grDevices utils     datasets
+## [8] methods   base
+##
 ## other attached packages:
-##  [1] BSgenome.Hsapiens.UCSC.hg19_1.3.19 targetSeqView_0.99                
-##  [3] doMC_1.3.0                         iterators_1.0.6                   
-##  [5] ggplot2_0.9.3.1.99                 BSgenome_1.28.0                   
-##  [7] Rsamtools_1.12.4                   Biostrings_2.28.0                 
-##  [9] GenomicRanges_1.12.5               IRanges_1.18.3                    
-## [11] BiocGenerics_0.6.0                 foreach_1.4.1                     
-## [13] knitr_1.4.1                       
-## 
+##  [1] BSgenome.Hsapiens.UCSC.hg19_1.3.19 targetSeqView_0.99
+##  [3] doMC_1.3.0                         iterators_1.0.6
+##  [5] ggplot2_0.9.3.1.99                 BSgenome_1.28.0
+##  [7] Rsamtools_1.12.4                   Biostrings_2.28.0
+##  [9] GenomicRanges_1.12.5               IRanges_1.18.3
+## [11] BiocGenerics_0.6.0                 foreach_1.4.1
+## [13] knitr_1.4.1
+##
 ## loaded via a namespace (and not attached):
-##  [1] bitops_1.0-6       codetools_0.2-8    colorspace_1.2-2  
-##  [4] compiler_3.0.1     dichromat_2.0-0    digest_0.6.3      
-##  [7] evaluate_0.4.7     formatR_0.9        gtable_0.1.2      
-## [10] labeling_0.2       MASS_7.3-28        munsell_0.4.2     
+##  [1] bitops_1.0-6       codetools_0.2-8    colorspace_1.2-2
+##  [4] compiler_3.0.1     dichromat_2.0-0    digest_0.6.3
+##  [7] evaluate_0.4.7     formatR_0.9        gtable_0.1.2
+## [10] labeling_0.2       MASS_7.3-28        munsell_0.4.2
 ## [13] plyr_1.8           proto_0.3-10       RColorBrewer_1.0-5
-## [16] reshape2_1.2.2     scales_0.2.3       stats4_3.0.1      
+## [16] reshape2_1.2.2     scales_0.2.3       stats4_3.0.1
 ## [19] stringr_0.6.2      tools_3.0.1        zlibbioc_1.6.0
 ```
 
