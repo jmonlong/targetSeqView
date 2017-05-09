@@ -5,8 +5,9 @@ The original repo hasn't been updated since 2014 and I got errors when testing i
 
 For now I "fixed" the following errors:
 
-- `task 1 failed - "'unlist' is not an exported object from 'namespace:Biostrings'"`
-- `task 1 failed - "'unlist' is not an exported object from 'namespace:GenomicRanges'"`
+1. `task 1 failed - "'unlist' is not an exported object from 'namespace:Biostrings'"`
+1.`task 1 failed - "'unlist' is not an exported object from 'namespace:GenomicRanges'"`
+1. Bug 3: `task 3 failed - "invalid subscript type 'list'"`
 
 # Installation
 install directly from github
