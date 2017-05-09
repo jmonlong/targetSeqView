@@ -27,7 +27,6 @@ function(events,filtsings=TRUE,findSplitReads=FALSE,dedup=TRUE,allowedMM=6,initi
 
     alignedall=foreach(ii=1:nrow(events),.combine='list',.multicombine=TRUE) %dopar% {
 
-
         bamFile=events[ii,'Sample']
         if('SplitsSample' %in% colnames(events)) bamFileSplits=events[ii,'SplitsSample'] else bamFileSplits <- NULL
 
